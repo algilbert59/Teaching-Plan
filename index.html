@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nursing Teaching Plan Template | CFCC LPN-ADN Program</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --accent: #185FA5;
+    --accent-light: #E6F1FB;
+    --accent-dark: #0C447C;
+    --accent-text: #0C447C;
+    --success: #3B6D11;
+    --success-light: #EAF3DE;
+    --warn: #BA7517;
+    --warn-light: #FAEEDA;
+    --danger: #A32D2D;
+    --danger-light: #FCEBEB;
+    --text-primary: #1a1a1a;
+    --text-secondary: #555;
+    --text-hint: #888;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f3;
+    --bg-tertiary: #efefec;
+    --border: rgba(0,0,0,0.12);
+    --border-med: rgba(0,0,0,0.2);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    min-height: 100vh;
+  }
+  a { color: var(--accent); }
+
+  /* Layout */
+  .page-header {
+    background: var(--accent);
+    color: #fff;
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .page-header h1 { font-size: 18px; font-weight: 500; flex: 1; }
+  .page-header .sub { font-size: 12px; opacity: 0.8; }
+  .container { max-width: 860px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+  /* Progress */
+  .progress-wrap { margin-bottom: 1.75rem; }
+  .step-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .step-dot {
+    font-size: 11px; padding: 5px 11px; border-radius: 20px;
+    border: 1px solid var(--border-med); color: var(--text-secondary);
+    cursor: pointer; transition: all 0.2s; background: var(--bg-primary);
+    white-space: nowrap;
+  }
+  .step-dot:hover { background: var(--accent-light); }
+  .step-dot.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .step-dot.done { background: var(--success-light); color: var(--success); border-color: var(--success); }
+  .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-hint); margin-bottom: 5px; }
+  .progress-bar-wrap { background: var(--bg-secondary); border-radius: 6px; height: 6px; }
+  .progress-bar-fill { height: 6px; border-radius: 6px; background: var(--accent); transition: width 0.4s ease; }
+
+  /* Cards */
+  .section { display: none; }
+  .section.visible { display: block; }
+  .section-header { font-size: 18px; font-weight: 500; margin-bottom: 4px; }
+  .section-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.5; }
+  .card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .card-title {
+    font-size: 11px; font-weight: 600; color: var(--text-secondary);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--border);
+  }
+
+  /* Forms */
+  label.field-label {
+    display: block; font-size: 13px; color: var(--text-secondary);
+    margin-bottom: 5px; margin-top: 14px;
+  }
+  label.field-label:first-child { margin-top: 0; }
+  input[type="text"], input[type="date"], select, textarea {
+    width: 100%; font-size: 14px; color: var(--text-primary);
+    background: var(--bg-secondary); border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: 8px 11px;
+    font-family: inherit; transition: border-color 0.15s;
+  }
+  input[type="text"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--accent); background: #fff;
+  }
+  textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+  select { cursor: pointer; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+  /* Checkboxes */
+  .check-row {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--text-primary);
+    margin-bottom: 8px; cursor: pointer;
+  }
+  .check-row input[type="checkbox"] { width: 15px; height: 15px; flex-shrink: 0; cursor: pointer; accent-color: var(--accent); }
+
+  /* Dynamic rows */
+  .obj-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 10px; }
+  .obj-row textarea { min-height: 52px; flex: 1; }
+  .obj-row select { min-width: 120px; flex-shrink: 0; height: 38px; }
+  .add-btn {
+    font-size: 13px; color: var(--accent-text);
+    border: 1px dashed var(--border-med);
+    border-radius: var(--radius-md); padding: 8px 14px;
+    background: transparent; cursor: pointer; margin-top: 4px;
+    width: 100%; text-align: left; font-family: inherit;
+    transition: background 0.15s;
+  }
+  .add-btn:hover { background: var(--accent-light); }
+  .del-btn {
+    font-size: 16px; color: var(--text-hint); border: none;
+    background: transparent; cursor: pointer; padding: 4px 6px;
+    border-radius: 4px; flex-shrink: 0; line-height: 1;
+    transition: color 0.15s, background 0.15s;
+  }
+  .del-btn:hover { color: var(--danger); background: var(--danger-light); }
+
+  /* Tips */
+  .tip {
+    font-size: 12px; color: var(--text-primary);
+    background: var(--warn-light); border-left: 3px solid var(--warn);
+    padding: 9px 13px; border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin-bottom: 14px; line-height: 1.6;
+  }
+  .tip b { color: #7a4e00; }
+  .bloom-ref {
+    font-size: 12px; color: var(--text-secondary);
+    background: var(--bg-secondary); border-radius: var(--radius-md);
+    padding: 9px 12px; margin-bottom: 14px; line-height: 1.6;
+  }
+  .bloom-ref b { color: var(--text-primary); font-weight: 600; }
+
+  /* Navigation */
+  .nav {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-top: 1.5rem; gap: 12px;
+  }
+  .btn {
+    padding: 9px 22px; border-radius: var(--radius-md);
+    border: 1px solid var(--border-med); font-size: 14px;
+    cursor: pointer; background: var(--bg-primary);
+    color: var(--text-primary); font-family: inherit;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn:hover { background: var(--bg-secondary); }
+  .btn:active { transform: scale(0.98); }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn.primary:hover { background: var(--accent-dark); }
+  .btn.success { background: var(--success); color: #fff; border-color: var(--success); }
+  .btn.success:hover { background: #2d5509; }
+
+  /* Print / Summary */
+  .summary-section { margin-bottom: 1.5rem; }
+  .summary-section h3 {
+    font-size: 12px; font-weight: 600; color: var(--text-secondary);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 10px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-row { display: flex; gap: 10px; margin-bottom: 6px; font-size: 13px; }
+  .summary-label { color: var(--text-secondary); min-width: 150px; flex-shrink: 0; }
+  .summary-val { color: var(--text-primary); }
+  .domain-tag {
+    display: inline-block; font-size: 11px; padding: 2px 8px;
+    border-radius: 10px; margin-right: 6px; font-weight: 500;
+  }
+  .domain-cog { background: var(--accent-light); color: var(--accent-text); }
+  .domain-psy { background: var(--success-light); color: var(--success); }
+  .domain-aff { background: var(--warn-light); color: var(--warn); }
+
+  /* Print styles */
+  @media print {
+    body { background: #fff; font-size: 12pt; }
+    .page-header { background: #185FA5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .progress-wrap, .step-nav, #main-nav, .add-btn, .del-btn, .btn, .no-print { display: none !important; }
+    .section { display: block !important; page-break-inside: avoid; }
+    .card { border: 1px solid #ccc; margin-bottom: 10pt; }
+    .tip { background: #fff8e6 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    textarea, input, select { border: 1px solid #ccc; background: #fff; }
+  }
+
+  @media (max-width: 600px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .container { padding: 1rem 0.75rem 3rem; }
+    .page-header { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <h1>Nursing Teaching Plan Template</h1>
+    <div class="sub">CFCC LPN-ADN Program &nbsp;|&nbsp; Complete all 6 sections</div>
+  </div>
+  <div style="display:flex; gap:8px; flex-wrap:wrap;">
+    <button class="btn" onclick="printPlan()" style="font-size:13px; padding:7px 14px;">Print / Save PDF</button>
+    <button class="btn primary" id="header-summary-btn" onclick="showSummary()" style="font-size:13px; padding:7px 14px; display:none;">View Summary</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="progress-wrap">
+    <div class="step-nav" id="step-nav"></div>
+    <div class="progress-meta">
+      <span id="step-badge">Step 1 of 6</span>
+      <span id="progress-label">0% complete</span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
+  </div>
+
+  <!-- SECTION 1: Patient & Learner Profile -->
+  <div class="section visible" id="sec-0">
+    <div class="section-header">Patient &amp; learner profile</div>
+    <div class="section-sub">Identify who you are teaching and assess their readiness to learn before planning content.</div>
+    <div class="card">
+      <div class="card-title">Patient / family information</div>
+      <div class="grid-2">
+        <div><label class="field-label">Patient initials or ID</label><input type="text" id="pt-id" placeholder="e.g., J.D."></div>
+        <div><label class="field-label">Age / developmental stage</label><input type="text" id="pt-age" placeholder="e.g., 58-year-old adult"></div>
+        <div><label class="field-label">Primary language</label><input type="text" id="pt-lang" placeholder="e.g., English"></div>
+        <div><label class="field-label">Education level</label>
+          <select id="pt-edu">
+            <option value="">Select</option>
+            <option>Less than high school</option><option>High school / GED</option>
+            <option>Some college</option><option>College graduate</option><option>Graduate degree</option>
+          </select>
+        </div>
+      </div>
+      <label class="field-label">Learner (who will receive teaching?)</label>
+      <div class="grid-3" style="margin-top:4px;">
+        <label class="check-row"><input type="checkbox" id="learner-pt"> Patient</label>
+        <label class="check-row"><input type="checkbox" id="learner-fam"> Family / caregiver</label>
+        <label class="check-row"><input type="checkbox" id="learner-other"> Other</label>
+      </div>
+      <label class="field-label">If other, specify</label>
+      <input type="text" id="learner-other-txt" placeholder="e.g., Home health aide, group home staff">
+    </div>
+
+    <div class="card">
+      <div class="card-title">Barriers to learning</div>
+      <div class="tip"><b>LPN-ADN tip:</b> Assess barriers before planning content. Unaddressed barriers are the #1 reason patient teaching fails. Document each barrier and your planned accommodation.</div>
+      <div class="grid-2">
+        <div>
+          <label class="field-label">Physical barriers</label>
+          <label class="check-row"><input type="checkbox" id="b-vision"> Vision impairment</label>
+          <label class="check-row"><input type="checkbox" id="b-hearing"> Hearing impairment</label>
+          <label class="check-row"><input type="checkbox" id="b-motor"> Limited dexterity / mobility</label>
+          <label class="check-row"><input type="checkbox" id="b-pain"> Pain or fatigue</label>
+        </div>
+        <div>
+          <label class="field-label">Psychological / social barriers</label>
+          <label class="check-row"><input type="checkbox" id="b-anxiety"> Anxiety or stress</label>
+          <label class="check-row"><input type="checkbox" id="b-health-lit"> Low health literacy</label>
+          <label class="check-row"><input type="checkbox" id="b-culture"> Cultural considerations</label>
+          <label class="check-row"><input type="checkbox" id="b-motivation"> Low motivation / readiness</label>
+        </div>
+      </div>
+      <label class="field-label">Other barriers and planned accommodations</label>
+      <textarea id="barriers-other" placeholder="Describe any additional barriers and how you plan to address them..."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Learning style &amp; prior knowledge</div>
+      <div class="grid-2">
+        <div>
+          <label class="field-label">Preferred learning style(s)</label>
+          <label class="check-row"><input type="checkbox" id="ls-visual"> Visual (diagrams, videos)</label>
+          <label class="check-row"><input type="checkbox" id="ls-verbal"> Verbal / auditory (discussion)</label>
+          <label class="check-row"><input type="checkbox" id="ls-reading"> Reading / writing</label>
+          <label class="check-row"><input type="checkbox" id="ls-kinesth"> Kinesthetic (hands-on demonstration)</label>
+        </div>
+        <div>
+          <label class="field-label">Prior knowledge of topic</label>
+          <textarea id="prior-knowledge" placeholder="What does the learner already know? Have they had previous teaching on this topic?"></textarea>
+          <label class="field-label" style="margin-top:10px;">Motivational factors</label>
+          <textarea id="motivation" placeholder="What motivates this learner? (e.g., returning to work, caring for grandchildren, fear of complications)" style="min-height:55px;"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Topic & Setting -->
+  <div class="section" id="sec-1">
+    <div class="section-header">Topic &amp; setting</div>
+    <div class="section-sub">Define the teaching topic, its connection to the patient's diagnosis, and the environment where teaching will take place.</div>
+    <div class="card">
+      <div class="card-title">Teaching topic</div>
+      <label class="field-label">Topic / subject of teaching</label>
+      <input type="text" id="topic" placeholder="e.g., Insulin self-injection technique">
+      <label class="field-label">Related medical diagnosis or condition</label>
+      <input type="text" id="diagnosis" placeholder="e.g., Type 2 diabetes mellitus">
+      <label class="field-label">Reason teaching is needed</label>
+      <select id="teach-reason">
+        <option value="">Select</option>
+        <option>New diagnosis</option><option>New medication or treatment</option>
+        <option>Discharge preparation</option><option>Reinforcement of prior teaching</option>
+        <option>Post-procedure care</option><option>Health promotion / prevention</option>
+        <option>Chronic disease self-management</option><option>Other</option>
+      </select>
+      <label class="field-label">Specific patient need or nurse concern prompting this teaching</label>
+      <textarea id="teach-rationale" placeholder="e.g., Patient diagnosed with T2DM 2 days ago; will be self-administering insulin at home. No prior experience with injections."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Setting &amp; logistics</div>
+      <div class="grid-2">
+        <div>
+          <label class="field-label">Care setting</label>
+          <select id="setting">
+            <option value="">Select</option>
+            <option>Acute care / hospital bedside</option><option>Step-down / telemetry unit</option>
+            <option>Ambulatory / outpatient clinic</option><option>Long-term care / SNF</option>
+            <option>Home health</option><option>Community / outpatient class</option>
+            <option>Telehealth / virtual visit</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Planned date of teaching</label>
+          <input type="date" id="teach-date">
+        </div>
+        <div>
+          <label class="field-label">Estimated duration (minutes)</label>
+          <input type="text" id="duration" placeholder="e.g., 30">
+        </div>
+        <div>
+          <label class="field-label">Number of sessions planned</label>
+          <select id="sessions">
+            <option>1</option><option>2</option><option>3</option><option>4 or more</option>
+          </select>
+        </div>
+      </div>
+      <label class="field-label">Environmental considerations</label>
+      <textarea id="environment" placeholder="Describe the teaching environment: noise level, privacy, lighting, space for demonstration, distractions, presence of family, patient positioning, etc."></textarea>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Learning Objectives -->
+  <div class="section" id="sec-2">
+    <div class="section-header">Learning objectives</div>
+    <div class="section-sub">Write SMART, measurable objectives using Bloom's Taxonomy. Include objectives from all three learning domains when appropriate.</div>
+    <div class="tip">
+      <b>SMART objectives:</b> Specific, Measurable, Achievable, Realistic, Time-bound. Begin with "By the end of this session, the learner will be able to..."<br>
+      <b>Action verbs by domain — Cognitive:</b> state, identify, explain, describe, compare, apply, analyze &nbsp;|&nbsp; <b>Psychomotor:</b> perform, demonstrate, administer, prepare, show &nbsp;|&nbsp; <b>Affective:</b> express, verbalize, commit, comply, acknowledge, value
+    </div>
+    <div class="bloom-ref">
+      <b>Bloom's Taxonomy (revised):</b> Remember → Understand → Apply → Analyze → Evaluate → Create<br>
+      Most patient teaching objectives target the <b>Apply</b> level or below. Psychomotor and affective domains are equally important for safe self-care.
+    </div>
+    <div class="card">
+      <div class="card-title">Objectives</div>
+      <div id="objectives-list"></div>
+      <button class="add-btn" onclick="addObjective()">+ Add objective</button>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Content & Methods -->
+  <div class="section" id="sec-3">
+    <div class="section-header">Content outline &amp; teaching methods</div>
+    <div class="section-sub">Describe what content you will teach, how you will teach it, and what materials you will use. Content should be sequenced logically and matched to the learner's level.</div>
+    <div class="card">
+      <div class="card-title">Content outline</div>
+      <div class="tip"><b>Tip:</b> Prioritize need-to-know over nice-to-know. Sequence from simple to complex. Limit each session to 3–5 key points to prevent cognitive overload.</div>
+      <div id="content-list"></div>
+      <button class="add-btn" onclick="addContent()">+ Add content item</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Teaching methods</div>
+      <div class="grid-2">
+        <div>
+          <label class="check-row"><input type="checkbox" id="m-lecture"> Verbal explanation</label>
+          <label class="check-row"><input type="checkbox" id="m-demo"> Live demonstration</label>
+          <label class="check-row"><input type="checkbox" id="m-return-demo"> Return demonstration</label>
+          <label class="check-row"><input type="checkbox" id="m-discussion"> Discussion / Q&amp;A</label>
+        </div>
+        <div>
+          <label class="check-row"><input type="checkbox" id="m-video"> Video</label>
+          <label class="check-row"><input type="checkbox" id="m-written"> Written materials / handouts</label>
+          <label class="check-row"><input type="checkbox" id="m-simulation"> Simulation / role play</label>
+          <label class="check-row"><input type="checkbox" id="m-group"> Group teaching</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Teaching materials &amp; resources</div>
+      <div class="grid-2">
+        <div>
+          <label class="check-row"><input type="checkbox" id="r-pamphlet"> Pamphlet / brochure</label>
+          <label class="check-row"><input type="checkbox" id="r-model"> Physical model or supplies</label>
+          <label class="check-row"><input type="checkbox" id="r-whiteboard"> Whiteboard / diagram</label>
+          <label class="check-row"><input type="checkbox" id="r-website"> Reputable website (ADA, AHA, etc.)</label>
+        </div>
+        <div>
+          <label class="check-row"><input type="checkbox" id="r-app"> Mobile health app</label>
+          <label class="check-row"><input type="checkbox" id="r-interpreter"> Interpreter / translation service</label>
+          <label class="check-row"><input type="checkbox" id="r-low-lit"> Low-literacy materials (6th grade or below)</label>
+          <label class="check-row"><input type="checkbox" id="r-other-res"> Other</label>
+        </div>
+      </div>
+      <label class="field-label">List specific materials, titles, or links</label>
+      <textarea id="materials-detail" placeholder="e.g., ADA 'Getting Started with Insulin' handout; insulin syringe and practice vial; teach-back prompt card; MedlinePlus en Español"></textarea>
+    </div>
+  </div>
+
+  <!-- SECTION 5: Evaluation -->
+  <div class="section" id="sec-4">
+    <div class="section-header">Evaluation of learning</div>
+    <div class="section-sub">How will you determine whether each learning objective has been met? Plan your evaluation strategy before teaching begins.</div>
+    <div class="tip">
+      <b>Teach-back is the gold standard.</b> Ask the learner to explain or demonstrate — never ask "Do you understand?" or "Does that make sense?" Open-ended teach-back prompts reveal true comprehension. Plan at least one teach-back question per objective.
+    </div>
+    <div class="card">
+      <div class="card-title">Evaluation methods</div>
+      <div class="grid-2">
+        <div>
+          <label class="check-row"><input type="checkbox" id="ev-teachback"> Teach-back (verbal explanation)</label>
+          <label class="check-row"><input type="checkbox" id="ev-demo"> Return demonstration</label>
+          <label class="check-row"><input type="checkbox" id="ev-quiz"> Written or verbal quiz</label>
+          <label class="check-row"><input type="checkbox" id="ev-observation"> Direct observation of behavior</label>
+        </div>
+        <div>
+          <label class="check-row"><input type="checkbox" id="ev-checklist"> Skills checklist</label>
+          <label class="check-row"><input type="checkbox" id="ev-questions"> Learner asks appropriate questions</label>
+          <label class="check-row"><input type="checkbox" id="ev-return"> Return visit / follow-up call</label>
+          <label class="check-row"><input type="checkbox" id="ev-journal"> Log or diary review (e.g., glucose log)</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Planned teach-back questions</div>
+      <div id="teachback-list"></div>
+      <button class="add-btn" onclick="addTeachback()">+ Add teach-back question</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Success criteria &amp; re-teaching plan</div>
+      <label class="field-label">Criteria for successful learning (how will you define mastery?)</label>
+      <textarea id="success-criteria" placeholder="e.g., Patient correctly demonstrates subcutaneous insulin injection using sterile technique with no more than 1 verbal prompt on 2 consecutive attempts."></textarea>
+      <label class="field-label">Re-teaching plan (if objectives are not met)</label>
+      <textarea id="reteach-plan" placeholder="e.g., Simplify content using visual aids, schedule second session before discharge, involve family member as support person, consult diabetes educator, use low-literacy materials..."></textarea>
+    </div>
+  </div>
+
+  <!-- SECTION 6: Documentation & Reflection -->
+  <div class="section" id="sec-5">
+    <div class="section-header">Documentation &amp; reflection</div>
+    <div class="section-sub">Complete this section after your teaching session. Document outcomes accurately and reflect on your practice.</div>
+    <div class="card">
+      <div class="card-title">Post-teaching documentation</div>
+      <div class="grid-2">
+        <div><label class="field-label">Date teaching completed</label><input type="date" id="doc-date"></div>
+        <div><label class="field-label">Actual time spent (minutes)</label><input type="text" id="time-spent" placeholder="e.g., 25"></div>
+      </div>
+      <label class="field-label">Who was present for teaching</label>
+      <input type="text" id="who-present" placeholder="e.g., Patient and daughter (Linda M., identified as primary caregiver)">
+      <label class="field-label">Learner response and observed engagement</label>
+      <textarea id="learner-response" placeholder="Describe how the learner engaged. Did they ask questions? Appear anxious, distracted, or fatigued? Were they receptive or resistant?"></textarea>
+      <label class="field-label">Objective outcomes (what was demonstrated or verbalized?)</label>
+      <textarea id="obj-outcomes" placeholder="e.g., Patient verbalized 3 of 3 hypoglycemia symptoms correctly without prompting. Demonstrated correct injection technique on first attempt. Stated she would call the clinic if BG drops below 70."></textarea>
+      <label class="field-label">Was re-teaching required?</label>
+      <select id="reteach-needed">
+        <option value="">Select</option>
+        <option>No — all objectives met</option>
+        <option>Partial — some objectives met; will continue next session</option>
+        <option>Yes — objectives not met; re-teaching scheduled</option>
+      </select>
+      <label class="field-label">Referrals made (if any)</label>
+      <input type="text" id="referrals" placeholder="e.g., Certified Diabetes Educator, registered dietitian, social work, pharmacy consult">
+    </div>
+
+    <div class="card">
+      <div class="card-title">Student self-reflection</div>
+      <div class="tip"><b>CFCC LPN-ADN Program:</b> Reflection is a required professional practice competency. Answer thoughtfully in your own words. These responses may be included in your clinical portfolio or submitted to your course instructor.</div>
+      <label class="field-label">What went well during this teaching session?</label>
+      <textarea id="reflect-well" placeholder="Be specific — describe what you did, how the learner responded, and what contributed to success..."></textarea>
+      <label class="field-label">What would you do differently next time?</label>
+      <textarea id="reflect-diff" placeholder="Consider: pacing, content level, environment, your communication style, use of teach-back, involvement of family..."></textarea>
+      <label class="field-label">What did this experience teach you about patient and family education?</label>
+      <textarea id="reflect-learn" placeholder="Connect to nursing theory, health literacy principles, or a concept from your coursework if applicable..."></textarea>
+      <label class="field-label">Student name</label>
+      <input type="text" id="student-name" placeholder="Your full name">
+      <label class="field-label">Date submitted</label>
+      <input type="date" id="submit-date">
+    </div>
+
+    <div class="nav">
+      <button class="btn" onclick="goStep(4)">← Back</button>
+      <div style="display:flex; gap:10px;">
+        <button class="btn success" onclick="showSummary()">View &amp; print completed plan</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav no-print" id="main-nav">
+    <button class="btn" id="back-btn" onclick="goBack()" style="display:none">← Back</button>
+    <div></div>
+    <button class="btn primary" id="next-btn" onclick="goNext()">Next →</button>
+  </div>
+
+  <!-- SUMMARY VIEW -->
+  <div id="summary-view" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:12px;">
+      <div>
+        <div class="section-header">Completed teaching plan</div>
+        <div class="section-sub">Review your plan below. Use Print / Save PDF to save a copy.</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn" onclick="hideSummary()">← Edit plan</button>
+        <button class="btn primary" onclick="printPlan()">Print / Save PDF</button>
+      </div>
+    </div>
+    <div id="summary-content"></div>
+  </div>
+
+</div>
+
+<script>
+const totalSteps = 6;
+const stepLabels = ["Profile","Topic","Objectives","Content","Evaluation","Documentation"];
+let currentStep = 0;
+
+function renderStepNav() {
+  const nav = document.getElementById("step-nav");
+  nav.innerHTML = "";
+  stepLabels.forEach((lbl, i) => {
+    const el = document.createElement("span");
+    el.className = "step-dot" + (i === currentStep ? " active" : i < currentStep ? " done" : "");
+    el.textContent = (i < currentStep ? "✓ " : (i+1) + ". ") + lbl;
+    el.onclick = () => goStep(i);
+    nav.appendChild(el);
+  });
+  document.getElementById("step-badge").textContent = "Step " + (currentStep+1) + " of " + totalSteps;
+  const pct = Math.round((currentStep / (totalSteps-1)) * 100);
+  document.getElementById("progress-bar").style.width = pct + "%";
+  document.getElementById("progress-label").textContent = pct + "% complete";
+  document.getElementById("back-btn").style.display = currentStep > 0 ? "inline-block" : "none";
+  document.getElementById("next-btn").style.display = currentStep < totalSteps - 1 ? "inline-block" : "none";
+  document.getElementById("main-nav").style.display = currentStep === totalSteps - 1 ? "none" : "flex";
+}
+
+function goStep(n) {
+  document.getElementById("sec-" + currentStep).classList.remove("visible");
+  document.getElementById("summary-view").style.display = "none";
+  document.getElementById("progress-wrap") && (document.querySelector(".progress-wrap").style.display = "block");
+  currentStep = n;
+  document.getElementById("sec-" + currentStep).classList.add("visible");
+  renderStepNav();
+  window.scrollTo(0,0);
+}
+function goNext() { if (currentStep < totalSteps-1) goStep(currentStep+1); }
+function goBack() { if (currentStep > 0) goStep(currentStep-1); }
+
+function addObjective() {
+  const list = document.getElementById("objectives-list");
+  const div = document.createElement("div");
+  div.className = "obj-row";
+  div.innerHTML = '<select title="Domain"><option value="Cognitive">Cognitive</option><option value="Psychomotor">Psychomotor</option><option value="Affective">Affective</option></select>'
+    + '<textarea placeholder="By the end of this session, the learner will be able to..."></textarea>'
+    + '<button class="del-btn" onclick="this.parentElement.remove()" title="Remove objective">&times;</button>';
+  list.appendChild(div);
+}
+
+function addContent() {
+  const list = document.getElementById("content-list");
+  const div = document.createElement("div");
+  div.className = "obj-row";
+  div.innerHTML = '<textarea placeholder="Content item — describe what you will teach (e.g., Signs and symptoms of hypoglycemia: diaphoresis, tremor, confusion, BG &lt;70 mg/dL)" style="flex:1;"></textarea>'
+    + '<button class="del-btn" onclick="this.parentElement.remove()" title="Remove item">&times;</button>';
+  list.appendChild(div);
+}
+
+function addTeachback() {
+  const list = document.getElementById("teachback-list");
+  const div = document.createElement("div");
+  div.className = "obj-row";
+  div.innerHTML = '<textarea placeholder="e.g., In your own words, what will you do if your blood sugar drops below 70?" style="flex:1;"></textarea>'
+    + '<button class="del-btn" onclick="this.parentElement.remove()" title="Remove question">&times;</button>';
+  list.appendChild(div);
+}
+
+function val(id) { const el = document.getElementById(id); return el ? el.value.trim() : ""; }
+function checked(id) { const el = document.getElementById(id); return el ? el.checked : false; }
+function checkList(ids, labels) {
+  return ids.map((id,i) => checked(id) ? labels[i] : null).filter(Boolean).join(", ") || "None selected";
+}
+
+function showSummary() {
+  for (let i=0; i<totalSteps; i++) document.getElementById("sec-"+i).classList.remove("visible");
+  document.getElementById("main-nav").style.display = "none";
+  document.getElementById("progress-wrap") && (document.querySelector(".progress-wrap").style.display = "none");
+
+  const learners = [];
+  if (checked("learner-pt")) learners.push("Patient");
+  if (checked("learner-fam")) learners.push("Family / caregiver");
+  if (checked("learner-other") && val("learner-other-txt")) learners.push(val("learner-other-txt"));
+
+  const barriers = [];
+  if (checked("b-vision")) barriers.push("Vision impairment");
+  if (checked("b-hearing")) barriers.push("Hearing impairment");
+  if (checked("b-motor")) barriers.push("Limited dexterity");
+  if (checked("b-pain")) barriers.push("Pain / fatigue");
+  if (checked("b-anxiety")) barriers.push("Anxiety / stress");
+  if (checked("b-health-lit")) barriers.push("Low health literacy");
+  if (checked("b-culture")) barriers.push("Cultural considerations");
+  if (checked("b-motivation")) barriers.push("Low motivation");
+
+  const styles = [];
+  if (checked("ls-visual")) styles.push("Visual");
+  if (checked("ls-verbal")) styles.push("Verbal / auditory");
+  if (checked("ls-reading")) styles.push("Reading / writing");
+  if (checked("ls-kinesth")) styles.push("Kinesthetic");
+
+  const methods = [];
+  if (checked("m-lecture")) methods.push("Verbal explanation");
+  if (checked("m-demo")) methods.push("Live demonstration");
+  if (checked("m-return-demo")) methods.push("Return demonstration");
+  if (checked("m-discussion")) methods.push("Discussion / Q&A");
+  if (checked("m-video")) methods.push("Video");
+  if (checked("m-written")) methods.push("Written materials");
+  if (checked("m-simulation")) methods.push("Simulation / role play");
+  if (checked("m-group")) methods.push("Group teaching");
+
+  const resources = [];
+  if (checked("r-pamphlet")) resources.push("Pamphlet / brochure");
+  if (checked("r-model")) resources.push("Physical model");
+  if (checked("r-whiteboard")) resources.push("Whiteboard / diagram");
+  if (checked("r-website")) resources.push("Reputable website");
+  if (checked("r-app")) resources.push("Mobile health app");
+  if (checked("r-interpreter")) resources.push("Interpreter");
+  if (checked("r-low-lit")) resources.push("Low-literacy materials");
+
+  const evalMethods = [];
+  if (checked("ev-teachback")) evalMethods.push("Teach-back");
+  if (checked("ev-demo")) evalMethods.push("Return demonstration");
+  if (checked("ev-quiz")) evalMethods.push("Quiz");
+  if (checked("ev-observation")) evalMethods.push("Direct observation");
+  if (checked("ev-checklist")) evalMethods.push("Skills checklist");
+  if (checked("ev-questions")) evalMethods.push("Learner questions");
+  if (checked("ev-return")) evalMethods.push("Return visit / follow-up");
+  if (checked("ev-journal")) evalMethods.push("Log review");
+
+  // Objectives
+  let objHTML = "";
+  document.querySelectorAll("#objectives-list .obj-row").forEach((row, i) => {
+    const domain = row.querySelector("select") ? row.querySelector("select").value : "";
+    const text = row.querySelector("textarea") ? row.querySelector("textarea").value.trim() : "";
+    if (text) {
+      const cls = domain === "Cognitive" ? "domain-cog" : domain === "Psychomotor" ? "domain-psy" : "domain-aff";
+      objHTML += '<div style="margin-bottom:8px; font-size:13px;"><span class="domain-tag ' + cls + '">' + domain + '</span>' + escHtml(text) + '</div>';
+    }
+  });
+  if (!objHTML) objHTML = '<span style="color:var(--text-hint); font-size:13px;">No objectives entered</span>';
+
+  // Content
+  let contentHTML = "";
+  document.querySelectorAll("#content-list .obj-row").forEach((row, i) => {
+    const text = row.querySelector("textarea") ? row.querySelector("textarea").value.trim() : "";
+    if (text) contentHTML += '<div style="margin-bottom:6px; font-size:13px; padding-left:12px; border-left:3px solid var(--border-med);">' + escHtml(text) + '</div>';
+  });
+  if (!contentHTML) contentHTML = '<span style="color:var(--text-hint); font-size:13px;">No content items entered</span>';
+
+  // Teach-back
+  let tbHTML = "";
+  document.querySelectorAll("#teachback-list .obj-row").forEach((row, i) => {
+    const text = row.querySelector("textarea") ? row.querySelector("textarea").value.trim() : "";
+    if (text) tbHTML += '<div style="margin-bottom:6px; font-size:13px;">' + (i+1) + '. &ldquo;' + escHtml(text) + '&rdquo;</div>';
+  });
+  if (!tbHTML) tbHTML = '<span style="color:var(--text-hint); font-size:13px;">No teach-back questions entered</span>';
+
+  function row(label, value) {
+    if (!value) value = '<span style="color:var(--text-hint)">—</span>';
+    return '<div class="summary-row"><span class="summary-label">' + label + '</span><span class="summary-val">' + escHtml(value) + '</span></div>';
+  }
+  function rowRaw(label, value) {
+    return '<div class="summary-row"><span class="summary-label">' + label + '</span><span class="summary-val">' + value + '</span></div>';
+  }
+
+  const html = `
+    <div class="card summary-section">
+      <div class="card-title">Section 1 — Patient &amp; learner profile</div>
+      ${row("Patient ID / initials", val("pt-id"))}
+      ${row("Age / developmental stage", val("pt-age"))}
+      ${row("Primary language", val("pt-lang"))}
+      ${row("Education level", val("pt-edu"))}
+      ${row("Learner(s)", learners.join(", "))}
+      ${row("Barriers to learning", barriers.length ? barriers.join(", ") : "None identified")}
+      ${val("barriers-other") ? row("Other barriers / accommodations", val("barriers-other")) : ""}
+      ${row("Learning style(s)", styles.length ? styles.join(", ") : "Not specified")}
+      ${row("Prior knowledge", val("prior-knowledge"))}
+      ${row("Motivational factors", val("motivation"))}
+    </div>
+    <div class="card summary-section">
+      <div class="card-title">Section 2 — Topic &amp; setting</div>
+      ${row("Topic", val("topic"))}
+      ${row("Related diagnosis", val("diagnosis"))}
+      ${row("Reason for teaching", val("teach-reason"))}
+      ${row("Rationale / nurse concern", val("teach-rationale"))}
+      ${row("Care setting", val("setting"))}
+      ${row("Planned teaching date", val("teach-date"))}
+      ${row("Estimated duration", val("duration") ? val("duration") + " minutes" : "")}
+      ${row("Sessions planned", val("sessions"))}
+      ${row("Environment notes", val("environment"))}
+    </div>
+    <div class="card summary-section">
+      <div class="card-title">Section 3 — Learning objectives</div>
+      ${objHTML}
+    </div>
+    <div class="card summary-section">
+      <div class="card-title">Section 4 — Content outline &amp; teaching methods</div>
+      <div style="margin-bottom:12px;"><div style="font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:8px;">Content outline</div>${contentHTML}</div>
+      ${row("Teaching methods", methods.length ? methods.join(", ") : "None selected")}
+      ${row("Resources / materials", resources.length ? resources.join(", ") : "None selected")}
+      ${row("Specific materials", val("materials-detail"))}
+    </div>
+    <div class="card summary-section">
+      <div class="card-title">Section 5 — Evaluation of learning</div>
+      ${row("Evaluation methods", evalMethods.length ? evalMethods.join(", ") : "None selected")}
+      <div style="margin: 10px 0;">${tbHTML}</div>
+      ${row("Success criteria", val("success-criteria"))}
+      ${row("Re-teaching plan", val("reteach-plan"))}
+    </div>
+    <div class="card summary-section">
+      <div class="card-title">Section 6 — Documentation &amp; reflection</div>
+      ${row("Date completed", val("doc-date"))}
+      ${row("Time spent", val("time-spent") ? val("time-spent") + " minutes" : "")}
+      ${row("Present for teaching", val("who-present"))}
+      ${row("Learner response", val("learner-response"))}
+      ${row("Objective outcomes", val("obj-outcomes"))}
+      ${row("Re-teaching required?", val("reteach-needed"))}
+      ${row("Referrals made", val("referrals"))}
+      ${row("What went well", val("reflect-well"))}
+      ${row("What to do differently", val("reflect-diff"))}
+      ${row("Learning from experience", val("reflect-learn"))}
+      ${row("Student name", val("student-name"))}
+      ${row("Date submitted", val("submit-date"))}
+    </div>`;
+
+  document.getElementById("summary-content").innerHTML = html;
+  document.getElementById("summary-view").style.display = "block";
+  window.scrollTo(0,0);
+}
+
+function hideSummary() {
+  document.getElementById("summary-view").style.display = "none";
+  document.querySelector(".progress-wrap").style.display = "block";
+  document.getElementById("sec-" + currentStep).classList.add("visible");
+  renderStepNav();
+  window.scrollTo(0,0);
+}
+
+function escHtml(str) {
+  if (!str) return "";
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>");
+}
+
+function printPlan() {
+  const summaryWas = document.getElementById("summary-view").style.display;
+  if (summaryWas === "none") showSummary();
+  setTimeout(function() {
+    const content = document.getElementById("summary-content").innerHTML;
+    const win = window.open("", "_blank");
+    win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Teaching Plan - CFCC LPN-ADN Program</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 12pt; color: #1a1a1a; padding: 2cm; }
+  h1 { font-size: 16pt; font-weight: 600; margin-bottom: 4px; }
+  .sub { font-size: 10pt; color: #555; margin-bottom: 1.5rem; }
+  .card { border: 1px solid #ccc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; page-break-inside: avoid; }
+  .card-title { font-size: 9pt; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #ddd; }
+  .summary-row { display: flex; gap: 10px; margin-bottom: 6px; font-size: 11pt; }
+  .summary-label { color: #555; min-width: 150px; flex-shrink: 0; }
+  .summary-val { color: #1a1a1a; }
+  .domain-tag { display: inline-block; font-size: 9pt; padding: 2px 8px; border-radius: 10px; margin-right: 6px; font-weight: 600; }
+  .domain-cog { background: #E6F1FB; color: #0C447C; }
+  .domain-psy { background: #EAF3DE; color: #3B6D11; }
+  .domain-aff { background: #FAEEDA; color: #BA7517; }
+  .tip { font-size: 10pt; background: #FAEEDA; border-left: 3px solid #BA7517; padding: 8px 12px; margin-bottom: 10px; border-radius: 0 6px 6px 0; }
+  @media print { body { padding: 1cm; } .card { page-break-inside: avoid; } }
+</style></head><body>
+<h1>Nursing Teaching Plan</h1>
+<div class="sub">CFCC LPN-ADN Program</div>
+${content}
+<script>window.onload = function(){ window.print(); }<\/script>
+</body></html>`);
+    win.document.close();
+  }, 300);
+}
+
+// Initialize
+addObjective();
+addContent();
+addTeachback();
+renderStepNav();
+</script>
+</body>
+</html>
